@@ -1,6 +1,5 @@
 
-
-
+#include "main.h"
 
 class Motor{
 
@@ -17,15 +16,16 @@ public :
         Hitec_Type
     }
 
-    Motor(){}
+    
     virtual ~Motor(){}
 
+    /* input 필수 기능 */
+    virtual void setPosition(uint16_t targetPosition) = 0;
+    /* input 옵션 기능 */
 
-    /* tx Data */
-
-    /* rx Data */
-
-
+    /* output 필수 기능*/
+    virtual uint16_t getPosition() const = 0;
+    /* output 옵션 기능 */
 
 protected :
     bool id_check(uint8_t gID, uint8_t sID){
@@ -34,14 +34,10 @@ protected :
         }               
         return false;
     }
-
-
 private :
+    
+    Motor(){} //Motor Class 는 단독으로 사용할 수 없음.
     /* Motor Infomation */
     uint8_t gID_;
     uint8_t sID_;
-
-    
-    
-
 };
