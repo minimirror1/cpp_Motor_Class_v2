@@ -9,18 +9,31 @@
 #define INC_MOTOR_H_
 
 #include "main.h"
+#include "Curve.h"
 
 class Motor {
 public:
     enum Status {
-        Status_None = 0,	//초기상태
-		Status_Init,		//초기화 진행
-		Status_PreRun,		//초기화 완료, 위치 동기화x
-		Status_PosiSync,	//위치 동기화
-        Status_Run,			//위치 동기화 완료
+        Status_None = 0,		//초기상태
+		/* 설정값 수신 */
+		Status_SettingInfo,		//공통 설정값 수신완료
+		Status_SettingData_op,	//설정값 op 수신완료
+		Status_SettingData_1,	//설정값 1 수신완료
+		Status_SettingData_2,	//설정값 2 수신완료
 
-		Status_Error,		//동작중 에러
-		Status_InitError	//초기화 에러
+		/* 모터 활성화 */
+		Status_Init,			//초기화 진행
+		Status_PreRun,			//초기화 완료, 위치 동기화x
+
+		/* 위치 동기화 */
+		Status_PosiSync_Ready,	//위치 동기화 준비
+		Status_PosiSync_Move,	//위치 동기화
+
+		/* 동작 가능 */
+        Status_Run,				//위치 동기화 완료
+
+		Status_Error,			//동작중 에러
+		Status_InitError		//초기화 에러
     };
 
     enum MotorType {
@@ -39,13 +52,17 @@ public:
 
     struct Monitor {
     	int32_t raw_current_posi;
+    	int32_t raw_command_posi;
     };
+
+
 
     virtual ~Motor() {}
 
     /* input 필수 기능 */
     /* init */
     virtual void setSettingInfo(uint8_t dir, uint16_t angle, uint16_t initPosi, uint16_t reducer_ratio) = 0;
+    virtual void setSettingData_op(uint32_t data_1, uint32_t data_2);	//data_1, data_2는 모터에 따라 해석이 변경됨.
 
     /* control */
     virtual void setPosition(uint16_t targetPosition) = 0;
@@ -58,7 +75,8 @@ public:
 
     /* 공통 funtion */
     virtual void init() = 0;
-    virtual void defaultPosi() = 0;
+    virtual void defaultPosi_Ready() = 0;
+    virtual void defaultPosi_Move() = 0;
 
 protected:
     bool id_check(uint8_t gID, uint8_t sID) {
@@ -67,6 +85,7 @@ protected:
         }
         return false;
     }
+
 
     /* Motor Infomation */
     uint8_t gID_;
@@ -78,6 +97,8 @@ protected:
     /* Motor Setting */
     MotorSetting setting_;
     Monitor monitor_;
+
+    Curve curve_;
 
     // 부모 클래스 생성자에 의해 호출되는 초기화 함수
     Motor(uint8_t gID, uint8_t sID, MotorType motorType)
