@@ -1,3 +1,12 @@
+/*
+ * Motor.h
+ *
+ *  Created on: Dec 13, 2023
+ *      Author: minim
+ */
+
+#ifndef INC_MOTOR_H_
+#define INC_MOTOR_H_
 
 #include "main.h"
 
@@ -65,3 +74,5 @@ protected:
 private:
     Motor() = delete; // Motor Class 는 단독으로 사용할 수 없음.
 };
+
+#endif /* INC_MOTOR_H_ */
