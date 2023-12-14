@@ -10,6 +10,16 @@ Motor::~Motor(){
 
 }
 
+void Motor::setSettingInfo(uint8_t dir, uint16_t angle, uint16_t initPosi, uint16_t reducer_ratio){
+	if(operatingStatus_ == Status_PreRun){
+		operatingStatus_ = Status_SettingInfo;
+
+		setting_.dir = dir;
+		setting_.angle = angle;
+		setting_.initPosi = initPosi;
+		setting_.reducer_ratio = reducer_ratio;
+	}
+}
 void Motor::defaultPosi_Ready(){
 	if(operatingStatus_ == Status_PreRun){
 		operatingStatus_ = Status_PosiSync_Ready;
@@ -36,5 +46,13 @@ void Motor::defaultPosi_Move(){
 				operatingStatus_ = Status_Run;
 		}
 	}
+}
+
+
+void Motor::process(){
+
+	/* 초기 위치 이동 체크 */
+	defaultPosi_Ready();
+	defaultPosi_Move();
 }
 

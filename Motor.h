@@ -53,6 +53,7 @@ public:
     };
 
     struct Monitor {
+    	int32_t mrs_current_posi;
     	int32_t raw_current_posi;
     	int32_t raw_command_posi;
     };
@@ -63,7 +64,7 @@ public:
 
     /* input 필수 기능 */
     /* init */
-    virtual void setSettingInfo(uint8_t dir, uint16_t angle, uint16_t initPosi, uint16_t reducer_ratio) = 0;
+    void setSettingInfo(uint8_t dir, uint16_t angle, uint16_t initPosi, uint16_t reducer_ratio);
     virtual void setSettingData_op(uint32_t data_1, uint32_t data_2) = 0;	//data_1, data_2는 모터에 따라 해석이 변경됨.
 
     /* control */
