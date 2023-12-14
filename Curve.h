@@ -11,11 +11,17 @@
 
 class Curve {
 public:
+
+	enum Curve_Status{
+		Curve_Move = 0,
+		Curve_Finish
+	};
+
 	Curve() {
 	}
 
 	/* Curve 사용 변수 초기화 */
-	void Curve_Clear(void)
+	void Clear(void)
 	{
 		InitFlag = SET;
 		a = 0;
@@ -30,7 +36,7 @@ public:
 	}
 
 	/* Curve 초기화 */
-	void Curve_Init(int32_t currentCnt, int32_t targetCnt, int32_t targetTime, int32_t timeQuantum){
+	void Init(int32_t currentCnt, int32_t targetCnt, int32_t targetTime, int32_t timeQuantum){
 
 		float y1 = (float)currentCnt;
 		float y2 = (float)targetCnt;//(float)homeCnt_ + (rangeCnt_ * (float)initPosi_/4095);
@@ -42,12 +48,12 @@ public:
 			TimeQuantum = timeQuantum;
 			TimeQuantumCnt = TimeRange / TimeQuantum;
 			TimeCnt = 0;
-			Curve_Hermite3(y1,y2,d1,d2);
+			Hermite3(y1,y2,d1,d2);
 		}
 	}
 
 	/* 다항식 계수 생성 */
-	void Curve_Hermite3(float y1,float y2,float d1,float d2){
+	void Hermite3(float y1,float y2,float d1,float d2){
 		float x1, x2;
 		x1 = 0;
 		x2 = TimeRange;
@@ -69,7 +75,7 @@ public:
 	}
 
 	/* 호출마다 위치값 반환 */
-	int32_t Curve_CalcHermiteY(uint32_t timeQuantum)
+	Curve_Status CalcHermiteY(uint32_t timeQuantum, int32_t *result)
 	{
 		int32_t temp;
 		float ret;
@@ -94,7 +100,12 @@ public:
 			temp = targetY;
 			InitFlag = RESET;//완료
 		}
-		return temp;
+		*result = (int32_t) temp;
+
+		if(InitFlag == RESET)
+			return Curve_Finish;
+		else
+			return Curve_Move;
 	}
 
 private:
