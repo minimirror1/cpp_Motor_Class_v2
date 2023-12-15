@@ -22,6 +22,7 @@ public:
 		Status_SettingData_op,	//설정값 op 수신완료
 		Status_SettingData_1,	//설정값 1 수신완료
 		Status_SettingData_2,	//설정값 2 수신완료
+		Statis_SettingOk,		//모든 설정값 수신완료
 
 		/* 모터 활성화 */
 		Status_Init,			//초기화 진행
@@ -64,8 +65,8 @@ public:
 
     /* input 필수 기능 */
     /* init */
-    void setSettingInfo(uint8_t dir, uint16_t angle, uint16_t initPosi, uint16_t reducer_ratio);
-    virtual void setSettingData_op(uint32_t data_1, uint32_t data_2) = 0;	//data_1, data_2는 모터에 따라 해석이 변경됨.
+    void setSettingInfo(uint8_t gid, uint8_t sid, uint8_t dir, uint16_t angle, uint16_t initPosi, uint16_t reducer_ratio);
+    virtual void setSettingData_op(uint8_t gid, uint8_t sid, uint32_t data_1, uint32_t data_2) = 0;	//data_1, data_2는 모터에 따라 해석이 변경됨.
 
     /* control */
     virtual void setPosition(uint16_t targetPosition) = 0;
@@ -74,12 +75,14 @@ public:
     /* input 옵션 기능 */
 
     /* output 필수 기능*/
+    Motor::Status getStatus(uint8_t sid, uint8_t gid);
     virtual uint16_t getPosition() const = 0;
     virtual int32_t getDefaultPosi() const = 0;
     /* output 옵션 기능 */
 
     /* 공통 funtion */
     virtual void init() = 0;
+
     void defaultPosi_Ready();
     void defaultPosi_Move();
 

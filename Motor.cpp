@@ -9,8 +9,17 @@ Motor::Motor(uint8_t gID, uint8_t sID, MotorType motorType)
 Motor::~Motor(){
 
 }
+Motor::Status Motor::getStatus(uint8_t gid, uint8_t sid){
+	if(id_check(gid, sid) == false)
+		return Status_None;
+	return operatingStatus_;
+}
 
-void Motor::setSettingInfo(uint8_t dir, uint16_t angle, uint16_t initPosi, uint16_t reducer_ratio){
+void Motor::setSettingInfo(uint8_t gID, uint8_t sID, uint8_t dir, uint16_t angle, uint16_t initPosi, uint16_t reducer_ratio){
+
+	if(id_check(gID, sID) == false)
+		return;
+
 	if(operatingStatus_ == Status_PreRun){
 		operatingStatus_ = Status_SettingInfo;
 
@@ -21,7 +30,7 @@ void Motor::setSettingInfo(uint8_t dir, uint16_t angle, uint16_t initPosi, uint1
 	}
 }
 void Motor::defaultPosi_Ready(){
-	if(operatingStatus_ == Status_PreRun){
+	if(operatingStatus_ == Statis_SettingOk){
 		operatingStatus_ = Status_PosiSync_Ready;
 
 		curve_.Clear();
@@ -52,7 +61,6 @@ void Motor::defaultPosi_Move(){
 void Motor::process(){
 
 	/* 초기 위치 이동 체크 */
-	defaultPosi_Ready();
 	defaultPosi_Move();
 }
 
