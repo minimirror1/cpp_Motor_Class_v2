@@ -20,14 +20,14 @@ void Motor::setSettingInfo(uint8_t gID, uint8_t sID, uint8_t dir, uint16_t angle
 	if(id_check(gID, sID) == false)
 		return;
 
-	if(operatingStatus_ == Status_PreRun){
+	//if(operatingStatus_ == Status_PreRun){
 		operatingStatus_ = Status_SettingInfo;
 
 		setting_.dir = dir;
 		setting_.angle = angle;
 		setting_.initPosi = initPosi;
 		setting_.reducer_ratio = reducer_ratio;
-	}
+	//}
 }
 void Motor::defaultPosi_Ready(){
 	if(operatingStatus_ == Statis_SettingOk){
@@ -51,8 +51,10 @@ void Motor::defaultPosi_Move(){
 			Curve::Curve_Status status = curve_.CalcHermiteY(20, &result);
 			setRawPosition(result);
 
-			if(status == Curve::Curve_Finish)
+			if(status == Curve::Curve_Finish){
+				monitor_.mrs_current_posi = setting_.initPosi;
 				operatingStatus_ = Status_Run;
+			}
 		}
 	}
 }

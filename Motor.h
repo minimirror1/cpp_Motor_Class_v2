@@ -48,7 +48,7 @@ public:
 
     struct MotorSetting {
         uint8_t dir;
-        uint16_t angle;
+        float angle;
         uint16_t initPosi;
         uint16_t reducer_ratio;
     };
