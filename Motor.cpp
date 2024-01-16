@@ -35,6 +35,7 @@ void Motor::defaultPosi_Ready(){
 
 		curve_.Clear();
 		int32_t targetCnt = getDefaultPosi();
+		getCurrentPosition();	//현 위치 동기화 raw_current_posi 새로고침
 		curve_.Init(monitor_.raw_current_posi, targetCnt, 5000, 20);
 	}
 }

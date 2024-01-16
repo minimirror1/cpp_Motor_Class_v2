@@ -9,8 +9,12 @@
 #define INC_MOTOR_H_
 
 #include "main.h"
+#include <stdio.h>
 #include "Curve.h"
 #include "../cpp_tick/cpp_tick.h"
+
+//#define MOTORLIB_VERSION "0.0.1"
+#define MOTORLIB_VERSION "0.0.2"	//버전, Jog 기능 추가
 
 class Motor {
 public:
@@ -62,6 +66,16 @@ public:
 
     ~Motor();
 
+    /* lib version */
+    void getVersion(char *major, char *minor, char *patch){
+    	int majorNum, minorNum, patchNum;
+		sscanf(MOTORLIB_VERSION, "%d.%d.%d", &majorNum, &minorNum, &patchNum);
+
+		sprintf(major, "%d", majorNum);
+		sprintf(minor, "%d", minorNum);
+		sprintf(patch, "%d", patchNum);
+    }
+    virtual void getDriverVersion(char *major, char *minor, char *patch) = 0;
 
     /* input 필수 기능 */
     /* init */
@@ -71,12 +85,13 @@ public:
     /* control */
     virtual void setPosition(uint16_t targetPosition) = 0;
     virtual void setRawPosition(int32_t targetPosition) = 0;
+    virtual void setJogMove(int jogCounter) = 0;
 
     /* input 옵션 기능 */
 
     /* output 필수 기능*/
     Motor::Status getStatus(uint8_t sid, uint8_t gid);
-    virtual uint16_t getPosition() const = 0;
+    virtual uint16_t getCurrentPosition() const = 0;
     virtual int32_t getDefaultPosi() const = 0;
     /* output 옵션 기능 */
 
