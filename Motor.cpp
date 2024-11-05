@@ -30,7 +30,8 @@ void Motor::setSettingInfo(uint8_t gID, uint8_t sID, uint8_t dir, uint16_t angle
 	//}
 }
 void Motor::defaultPosi_Ready(){
-	if(operatingStatus_ == Statis_SettingOk){
+	if(operatingStatus_ == Statis_SettingOk
+		|| operatingStatus_ == Status_Run){	//241105 Run 상태에서 다시 초기위치 이동을 위하여 추가
 		operatingStatus_ = Status_PosiSync_Ready;
 
 		curve_.Clear();
