@@ -83,7 +83,7 @@ public:
     virtual void setSettingData_op(uint8_t gid, uint8_t sid, uint32_t data_1, uint32_t data_2) = 0;	//data_1, data_2는 모터에 따라 해석이 변경됨.
 
     /* control */
-    virtual void setPosition(uint16_t targetPosition) = 0;
+    virtual void setPosition(uint32_t targetPosition) = 0;
     virtual void setRawPosition(int32_t targetPosition) = 0;
     virtual void setJogMove(int jogCounter) = 0;
 
